@@ -18,6 +18,8 @@ defmodule FlintDemoWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/books/new", BookLive, :new
   end
 
   # Other scopes may use custom stacks.
