@@ -23,7 +23,7 @@ defmodule FlintDemoWeb.BookLive do
     {:ok, assign(socket, form: form)}
   end
 
-  def handle_event("validate", params, socket) do
+  def handle_event("validate", %{"form" => params}, socket) do
     form = %Form{} |> Form.changeset(params) |> to_form(action: :validate)
     {:noreply, assign(socket, form: form)}
   end
