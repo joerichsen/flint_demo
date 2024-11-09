@@ -9,6 +9,13 @@ defmodule FlintDemoWeb.BookLive do
 
     embedded_schema do
       field! :title, :string
+
+      field! :published_on, :integer,
+        map: fn -> Date.new!(published_year, published_month, published_day) end
+
+      field! :published_day, :integer, derive: published_on.day
+      field! :published_month, :integer, derive: published_on.month
+      field! :published_year, :integer, derive: published_on.year
     end
   end
 
@@ -17,6 +24,10 @@ defmodule FlintDemoWeb.BookLive do
     <h1>New Book</h1>
     <.form for={@form} phx-change="validate" phx-submit="save">
       <.input field={@form[:title]} />
+      <.input field={@form[:published_day]} />
+      <.input field={@form[:published_month]} />
+      <.input field={@form[:published_year]} />
+      <.button type="submit">Save</.button>
     </.form>
     """
   end
@@ -33,9 +44,7 @@ defmodule FlintDemoWeb.BookLive do
 
   def handle_event("save", %{"form" => params}, socket) do
     changeset = %Form{} |> Form.changeset(params)
-
     %Book{} |> Ecto.Changeset.change(changeset.changes) |> Repo.insert()
-
     {:noreply, redirect(socket, to: ~p"/books")}
   end
 end
