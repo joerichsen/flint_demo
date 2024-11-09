@@ -8,7 +8,7 @@ defmodule FlintDemoWeb.BookLive do
     use Flint.Schema
 
     embedded_schema do
-      field!(:title, :string)
+      field! :title, :string
     end
   end
 
