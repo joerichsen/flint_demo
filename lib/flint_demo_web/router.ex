@@ -20,6 +20,7 @@ defmodule FlintDemoWeb.Router do
     get "/", PageController, :home
 
     live "/books/new", BookLive, :new
+    live "/books", BooksLive
   end
 
   # Other scopes may use custom stacks.

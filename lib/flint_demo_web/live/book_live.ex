@@ -1,6 +1,9 @@
 defmodule FlintDemoWeb.BookLive do
   use FlintDemoWeb, :live_view
 
+  alias FlintDemo.Repo
+  alias FlintDemo.Schema.Book
+
   defmodule Form do
     use Flint.Schema
 
@@ -26,5 +29,13 @@ defmodule FlintDemoWeb.BookLive do
   def handle_event("validate", %{"form" => params}, socket) do
     form = %Form{} |> Form.changeset(params) |> to_form(action: :validate)
     {:noreply, assign(socket, form: form)}
+  end
+
+  def handle_event("save", %{"form" => params}, socket) do
+    changeset = %Form{} |> Form.changeset(params)
+
+    %Book{} |> Ecto.Changeset.change(changeset.changes) |> Repo.insert()
+
+    {:noreply, redirect(socket, to: ~p"/books")}
   end
 end
