@@ -10,12 +10,11 @@ defmodule FlintDemoWeb.BookLive do
     embedded_schema do
       field! :title, :string
 
-      field! :published_on, :integer,
-        map: fn -> Date.new!(published_year, published_month, published_day) end
+      field! :published_on, :date
 
-      field! :published_day, :integer, derive: published_on.day
-      field! :published_month, :integer, derive: published_on.month
-      field! :published_year, :integer, derive: published_on.year
+      field :published_day, :integer, derive: published_on.day
+      field :published_month, :integer, derive: published_on.month
+      field :published_year, :integer, derive: published_on.year
     end
   end
 
@@ -24,6 +23,7 @@ defmodule FlintDemoWeb.BookLive do
     <h1>New Book</h1>
     <.form for={@form} phx-change="validate" phx-submit="save">
       <.input field={@form[:title]} />
+      <.input field={@form[:published_on]} type="hidden" />
       <.input field={@form[:published_day]} />
       <.input field={@form[:published_month]} />
       <.input field={@form[:published_year]} />
@@ -33,7 +33,7 @@ defmodule FlintDemoWeb.BookLive do
   end
 
   def mount(_params, _session, socket) do
-    form = %Form{} |> Form.changeset(%{}) |> to_form()
+    form = Form.changeset(%Form{}, %{published_on: Date.utc_today()}) |> to_form()
     {:ok, assign(socket, form: form)}
   end
 
